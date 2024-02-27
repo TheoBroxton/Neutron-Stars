@@ -19,9 +19,16 @@ c = 299792458  # Speed of light in m/s
 M0 = 1.9891e30  # Solar mass in kg
 hbar = 1.0545718e-34  # Planck constant over 2*pi in J*s
 mn = 1.674927471e-27  # Mass of a neutron in kg
+me = 9.1093837015e-31  # Mass of an electron in kg
+eta_wd = 2  # Ratio of A/Z for white dwarf
+eta_n = 1  # Ratio of A/Z for neutron star
 
 # Equation of state constant
-K = ((hbar**2) / (15 * np.pi**2 * mn)) * ((3 * np.pi**2) / (mn * c**2))**(5/3)
+K = ((hbar**2) / (15 * np.pi**2 * me)) * \
+    ((3 * np.pi**2) / (mn * eta_wd * c**2))**(5/3)
+
+# Epsilon_0 for a Fermi gas
+epsilon0 = (mn**4 * c**5) / (np.pi**2 * hbar**3)
 
 # Compute R0
 R0 = G * M0 / c**2
@@ -85,10 +92,10 @@ def rk4_step_till(grad, time, state, step_size, final_time):
 def grad(time, state):
     r, p, mbar = state
 
-    epsilon = hbar
+    # epsilon = (epsilon0 / 3) * r**3
 
     # Compute epsilon from the polytropic equation of state
-    p = K*epsilon**gamma
+    # p = K*epsilon**gamma
 
     # Compute dp/dr and dmbar/dr
     dp_dr = -(R0 * p**(1/gamma) * mbar) / (r**2 * K**(1/gamma))
