@@ -11,24 +11,30 @@ Authors: Theo Broxton, Joshua Edwards
 """
 import numpy as np
 import matplotlib.pyplot as plt
+# import scipy.constants as pc
+from scipy.constants import c, hbar, G, m_e, m_p, m_n, pi
 
 # Constants
-gamma = 5/3
-G = 6.67430e-11  # Gravitational constant in m^3/kg/s^2
-c = 299792458  # Speed of light in m/s
+gamma_nrel = 5/3
+gamma_rel = 4/3
+# G = 6.67430e-11  # Gravitational constant in m^3/kg/s^2
+# c = 299792458  # Speed of light in m/s
 M0 = 1.9891e30  # Solar mass in kg
-hbar = 1.0545718e-34  # Planck constant over 2*pi in J*s
-mn = 1.674927471e-27  # Mass of a neutron in kg
-me = 9.1093837015e-31  # Mass of an electron in kg
+# hbar = 1.0545718e-34  # Planck constant over 2*pi in J*s
+# mn = 1.674927471e-27  # Mass of a neutron in kg
+# me = 9.1093837015e-31  # Mass of an electron in kg
+m_N = 0.5 * (m_p + m_n)
 eta_wd = 2  # Ratio of A/Z for white dwarf
 eta_n = 1  # Ratio of A/Z for neutron star
 
 # Equation of state constant
-K = ((hbar**2) / (15 * np.pi**2 * me)) * \
-    ((3 * np.pi**2) / (mn * eta_wd * c**2))**(5/3)
+K_nrel = ((hbar**2) / (15 * pi**2 * m_e)) * \
+    ((3 * pi**2) / (m_N * eta_wd * c**2))**(gamma_nrel)
+K_rel = ((hbar * c) / (12 * pi**2)) * \
+    ((3 * pi**2) / (m_N * eta_wd * c**2))**(gamma_rel)
 
 # Epsilon_0 for a Fermi gas
-epsilon0 = (mn**4 * c**5) / (np.pi**2 * hbar**3)
+epsilon0 = (m_n**4 * c**5) / (pi**2 * hbar**3)
 
 # Compute R0
 R0 = G * M0 / c**2
@@ -98,8 +104,9 @@ def grad(time, state):
     # p = K*epsilon**gamma
 
     # Compute dp/dr and dmbar/dr
-    dp_dr = -(R0 * p**(1/gamma) * mbar) / (r**2 * K**(1/gamma))
-    dmbar_dr = (4 * np.pi * r**2 * p**(1/gamma)) / (M0 * c**2 * K**(1/gamma))
+    dp_dr = -(R0 * p**(1/gamma_nrel) * mbar) / (r**2 * K_nrel**(1/gamma_nrel))
+    dmbar_dr = (4 * pi * r**2 * p**(1/gamma_nrel)) / \
+        (M0 * c**2 * K_nrel**(1/gamma_nrel))
 
     return np.array([1, dp_dr, dmbar_dr])
 
