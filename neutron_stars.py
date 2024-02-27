@@ -142,4 +142,5 @@ ax2.tick_params(axis='y', labelcolor=color)
 fig.tight_layout()
 fig.legend(loc="upper right")
 
+plt.savefig('Figures/WD_non-rel.pdf', dpi=300)
 plt.show()
