@@ -6,12 +6,11 @@ PHYS20872 Project - Neutron Stars
 ---------------------------------
 This Python script performs calculations based on neutron star parameters.
 
-Last updated: 27/02/24
+Last updated: 09/03/24
 Authors: Theo Broxton, Joshua Edwards
 """
 import numpy as np
 import matplotlib.pyplot as plt
-# import scipy.constants as pc
 from scipy.constants import c, hbar, G, m_e, m_p, m_n, pi
 
 # Constants

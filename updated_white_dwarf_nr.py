@@ -6,7 +6,7 @@ PHYS20872 Project - Neutron Stars
 ---------------------------------
 This Python script performs calculations based on neutron star parameters.
 
-Last updated: 27/02/24
+Last updated: 09/03/24
 Authors: Theo Broxton, Joshua Edwards
 """
 import numpy as np
@@ -42,6 +42,7 @@ R0 = G * M0 / c**2
 p0 = 2.33002e21  # Initial pressure at r=0 in Pa
 mbar0 = 0.0  # Initial mass at r=0 (normalized) in kg/M0
 
+
 def rk4_step(grad, time, state, step_size):
     # Calculate various midpoint k states
     k1 = grad(time, state)*step_size
@@ -50,6 +51,7 @@ def rk4_step(grad, time, state, step_size):
     k4 = grad(time+step_size, state+k3)*step_size
     # Return new time and state
     return time+step_size, state+(k1/2 + k2 + k3 + k4/2)/3
+
 
 def rk4_step_till(grad, time, state, step_size, final_time):
     # Prepare numpy arrays for storing data
@@ -66,6 +68,7 @@ def rk4_step_till(grad, time, state, step_size, final_time):
         state_arr = np.vstack((state_arr, new_state))
 
     return times, state_arr
+
 
 def grad(time, state):
     r, p, mbar = state
@@ -135,5 +138,6 @@ zero_pressure_mass = mass_values[zero_pressure_index]
 # Convert mass to solar masses
 zero_pressure_mass_solar = zero_pressure_mass / M0
 
-print("Distance from center where pressure reaches 0:", zero_pressure_distance, "m")
+print("Distance from center where pressure reaches 0:",
+      zero_pressure_distance, "m")
 print("Mass at this distance:", zero_pressure_mass_solar, "solar masses")
