@@ -1,3 +1,6 @@
+"""
+Calculate total radius and mass of neutron star for a given initial pressure.
+"""
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.constants import c, hbar, G, m_e, m_p, m_n, pi
@@ -7,7 +10,7 @@ from scipy.integrate import solve_ivp
 # Define parameters
 # r=1e-10 to avoid division by zero
 initial_state_wd = [1e-10, 2.33002e21, 0.0]
-initial_state_ns = [1e-10, 1e31, 0.0]  # r=1e-10 to avoid division by zero
+initial_state_ns = [1e-10, 1e32, 0.0]  # r=1e-10 to avoid division by zero
 final_time_wd = 1.8e7  # Adjust as needed
 final_time_ns = 1e8
 step_size_wd = 1e4  # Adjust as needed

@@ -98,72 +98,19 @@ def calculate_total_mass_radius(solutions, M0):
     return total_masses, total_radii
 
 
-def plot_mass_radius_vs_pressure(pressures, total_masses, total_radii):
-    """
-    Plot the mass and radius of neutron stars against the initial pressures.
-
-    Parameters:
-        pressures (array-like): Array of initial pressures.
-        total_masses (array-like): Array of total masses corresponding to each
-                                   initial pressure.
-        total_radii (array-like): Array of total radii corresponding to each
-                                  initial pressure.
-    """
-    fig, ax1 = plt.subplots()
-
-    color = 'tab:red'
-    ax1.set_ylabel('Total Radius (m)', color=color)
-    ax1.set_xlabel('Initial Pressure (Pa)')
-    ax1.plot(pressures, total_radii, color=color, label='Total Radius')
-    ax1.tick_params(axis='y', labelcolor=color)
-
-    ax2 = ax1.twinx()
-    color = 'tab:blue'
-    ax2.set_ylabel('Total Mass ($M_0$)', color=color)
-    ax2.plot(pressures, total_masses, color=color, label='Total Mass')
-    ax2.tick_params(axis='y', labelcolor=color)
-
-    fig.tight_layout()
-    fig.legend(loc="upper right")
-
-    plt.savefig('Figures/WD_varying_p0.pdf', dpi=300)
-    plt.show()
-
-
 if __name__ == "__main__":
     # Define parameters
-    initial_pressures_wd = np.linspace(1e20, 5e21, 100)
-    initial_states_wd = [[1e-10, p0, 0.0] for p0 in initial_pressures_wd]
-    initial_pressures_ns = np.linspace(1e30, 5e32, 100)
+    initial_pressures_ns = np.linspace(1e31, 5e32, 100)
     initial_states_ns = [[1e-10, p0, 0.0] for p0 in initial_pressures_ns]
-    final_time_wd = 1.8e7  # Adjust as needed
-    final_time_ns = 1.8e8
-    step_size_wd = 1e4  # Adjust as needed
+    final_time_ns = 5e7
     step_size_ns = 1e4  # Adjust as needed
     M0 = 1.9891e30  # Solar mass in kg
     R0 = G * M0 / c**2  # Half Schwarzchild radius in km
     gamma_nrel = 5/3
-    gamma_rel = 4/3
-    eta_wd = 2  # Ratio of A/Z for white dwarf
     eta_ns = 1  # Ratio of A/Z for neutron star
     m_N = 0.5 * (m_p + m_n)
-    K_nrel_wd = ((hbar**2) / (15 * pi**2 * m_e)) * \
-        ((3 * pi**2) / (m_N * eta_wd * c**2))**(gamma_nrel)
     K_nrel_ns = ((hbar**2) / (15 * pi**2 * m_n)) * \
         ((3 * pi**2) / (m_N * eta_ns * c**2))**(gamma_nrel)
-
-    # --- WD Calculations ---
-    # Solve ODE for multiple initial states
-    solutions_wd = solve_neutron_star_ode(
-        initial_states_wd, final_time_wd, step_size_wd, M0, gamma_nrel, K_nrel_wd)
-
-    # Calculate total mass and total radius for each solution
-    total_masses_wd, total_radii_wd = calculate_total_mass_radius(
-        solutions_wd, M0)
-
-    # Plot total mass and total radius vs. initial pressure
-    plot_mass_radius_vs_pressure(initial_pressures_wd, total_masses_wd,
-                                 total_radii_wd)
 
     # --- NS Calculations ---
     # Solve ODE for multiple initial states
@@ -173,7 +120,3 @@ if __name__ == "__main__":
     # Calculate total mass and total radius for each solution
     total_masses_ns, total_radii_ns = calculate_total_mass_radius(
         solutions_ns, M0)
-
-    # Plot total mass and total radius vs. initial pressure
-    plot_mass_radius_vs_pressure(initial_pressures_ns, total_masses_ns,
-                                 total_radii_ns)
